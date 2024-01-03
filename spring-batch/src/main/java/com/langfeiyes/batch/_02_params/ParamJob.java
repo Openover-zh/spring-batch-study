@@ -41,17 +41,18 @@ public class ParamJob {
     //构造一个step对象执行的任务（逻辑对象）
     @StepScope
     @Bean
-    public Tasklet tasklet(@Value("#{jobParameters['name']}")String name){
+//    public Tasklet tasklet(@Value("#{jobParameters['name']}")String name){
+    public Tasklet tasklet(){
         return new Tasklet() {
             @Override
             public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
                 //要执行逻辑--step步骤执行逻辑
                 //方案1： 使用chunkContext
-                //Map<String, Object> jobParameters = chunkContext.getStepContext().getJobParameters();
-                //System.out.println("params---name:" + jobParameters.get("name"));
+                Map<String, Object> jobParameters = chunkContext.getStepContext().getJobParameters();
+                System.out.println("params---name:" + jobParameters.get("name"));
 
                 //方案2： 使用@Vlaue
-                System.out.println("params---name:" + name);
+//                System.out.println("params---name:" + name);
                 return RepeatStatus.FINISHED;  //执行完了
             }
         };
@@ -64,27 +65,27 @@ public class ParamJob {
         //tasklet 执行step逻辑， 类似 Thread()--->可以执行runable接口
         return stepBuilderFactory
                 .get("step1")
-                .tasklet(tasklet(null))
+                .tasklet(tasklet())
                 .build();
     }
 
 
     //构造一个job对象
-   /* @Bean
+    @Bean
     public  Job job(){
         return jobBuilderFactory.get("param-job").start(step1()).build();
-    }*/
+    }
     /*@Bean
     public  Job job(){
         return jobBuilderFactory.get("param-chunk-job").start(step1()).build();
     }*/
-    @Bean
-    public  Job job(){
-        return jobBuilderFactory
-                .get("param-value-job1")
-                .start(step1())
-                .build();
-    }
+//    @Bean
+//    public  Job job(){
+//        return jobBuilderFactory
+//                .get("param-value-job1")
+//                .start(step1())
+//                .build();
+//    }
 
     public static void main(String[] args) {
         SpringApplication.run(ParamJob.class, args);

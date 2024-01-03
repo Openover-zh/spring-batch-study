@@ -96,6 +96,7 @@ public class ListenerJobStopJob {
         return jobBuilderFactory.get("step-stop-job")
                 .start(step1())
                 //当step1 返回的是STOPPED状态码，马上结束作业流程，设置流程状态为：STOPPED，并设置重启，从step1位置开始执行
+                // stopAndRestart如果下次名称和参数相同 会继续从step1位置开始执行
                 .on("STOPPED").stopAndRestart(step1())
                 //如果step1执行结果不是STOPPED 而是其他状态， 表示满足判断条件，然后执行step2步骤
                 .from(step1()).on("*").to(step2())

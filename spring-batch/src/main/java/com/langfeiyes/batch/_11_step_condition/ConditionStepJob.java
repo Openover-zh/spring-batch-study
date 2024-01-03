@@ -44,8 +44,8 @@ public class ConditionStepJob {
 
                 System.out.println("----------------firstTasklet---------------");
 
-//                throw new RuntimeException("假装失败了");
-                return RepeatStatus.FINISHED;  //执行完了
+                throw new RuntimeException("假装失败了");
+//                return RepeatStatus.FINISHED;  //执行完了
             }
         };
     }

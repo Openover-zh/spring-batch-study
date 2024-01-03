@@ -6,6 +6,7 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.listener.JobListenerFactoryBean;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.scope.context.JobContext;
@@ -44,10 +45,11 @@ public class StatusListenerJob {
         return new Tasklet() {
             @Override
             public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-                StepExecution stepExecution = contribution.getStepExecution();
-
-
-
+//                System.out.println("----------------");
+//                StepExecution stepExecution = contribution.getStepExecution();
+//
+//
+//
                 //要执行逻辑--step步骤执行逻辑
                 JobExecution jobExecution = contribution.getStepExecution().getJobExecution();
                 System.out.println("作业执行中的状态:" + jobExecution.getStatus());
@@ -75,11 +77,17 @@ public class StatusListenerJob {
     }
 
     @Bean
+    public RunIdIncrementer jobIncrementer(){
+        return new RunIdIncrementer();
+    }
+
+    @Bean
     public  Job job(){
-        return jobBuilderFactory.get("job-state-anno-listener-job1")
+        return jobBuilderFactory.get("job-state-anno-listener-job2")
                 .start(step1())
 //                .listener(jobStateListener())
 //                .listener(jobStateAnnoListener())
+                .incrementer(jobIncrementer())
                 .listener(JobListenerFactoryBean.getListener(new JobStateAnnoListener()))
                 .build();
     }

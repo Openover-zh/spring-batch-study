@@ -79,8 +79,8 @@ public class IncrementParamJob {
         return jobBuilderFactory
                 .get("incr-params-job")
                 .start(step1())
-//                .incrementer(new RunIdIncrementer())  //run.id自增
-                .incrementer(dailyTimestampParamIncrementer())  //时间戳的自增
+                .incrementer(new RunIdIncrementer())  //run.id自增
+//                .incrementer(dailyTimestampParamIncrementer())  //时间戳的自增
                 .build();
     }
 

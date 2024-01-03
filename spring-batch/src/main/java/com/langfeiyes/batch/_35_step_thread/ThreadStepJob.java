@@ -6,6 +6,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
@@ -67,8 +68,9 @@ public class ThreadStepJob {
 
     @Bean
     public Job job(){
-        return jobBuilderFactory.get("thread-step-job32")
+        return jobBuilderFactory.get("thread-step-job33")
                 .start(step())
+                .incrementer(new RunIdIncrementer())
                 .build();
     }
 
